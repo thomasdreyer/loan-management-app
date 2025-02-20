@@ -14,33 +14,58 @@ datasource db {
 }
 
 model Loan {
-  id          String @id @default(uuid())
-  amount      Float
-  interest    Float
-  term        Int
-  status      String @default("pending")
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  amount    Float
+  interest  Float
+  term      Int
+  status    String   @default("pending")
+  clientId  String?
+  client    Client?  @relation("ClientLoans", fields: [clientId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Client {
+  id          String    @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String    @unique
+  phone       String?
+  address     String?
+  dateOfBirth DateTime?
+  employment  String?   // e.g., Employer's name or employment status
+  income      Float?    // Annual or monthly income
+  creditScore Int?      // Credit score of the client
+  loans       Loan[]    @relation("ClientLoans")  // Relates to loans applied by this client
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+
+enum UserRole {
+  TELLER
+  MANAGER
+  ADMIN
+  AUDITOR
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?  @unique
+  email         String?        @unique
+  password      String?        // Hashed password
+  role          UserRole
+  branch        String?
+  department    String?
+  accessLevel   Int
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   accounts      Account[]
   sessions      Session[]
-  posts         Post[]
-}
-
-
-model Post { // Add this model definition
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String   @map("author_id")
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 

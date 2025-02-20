@@ -14,7 +14,8 @@ export default NextAuth({
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: '/auth/signin'  // (Optional) Custom sign-in page route
+    signIn: '/auth/signin',
+    error: '/auth/error',
   },
   callbacks: {
     async session({ session, user }) {
