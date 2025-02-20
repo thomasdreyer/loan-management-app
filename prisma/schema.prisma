@@ -19,30 +19,18 @@ model Loan {
   interest  Float
   term      Int
   status    String   @default("pending")
-  clientId  String?
-  client    Client?  @relation("ClientLoans", fields: [clientId], references: [id])
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
 model Client {
-  id          String    @id @default(cuid())
-  firstName   String
-  lastName    String
-  email       String    @unique
-  phone       String?
-  address     String?
-  dateOfBirth DateTime?
-  employment  String?   // e.g., Employer's name or employment status
-  income      Float?    // Annual or monthly income
-  creditScore Int?      // Credit score of the client
-  loans       Loan[]    @relation("ClientLoans")  // Relates to loans applied by this client
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id    String  @id @default(cuid())
+  name  String
+  email  String  @unique
+  loans Loan[]
 }
-
-
 
 enum UserRole {
   TELLER
