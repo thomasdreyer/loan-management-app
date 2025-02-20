@@ -1,28 +1,40 @@
+// src/components/LoanList.tsx
 'use client';
+
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { DataTable } from './DataTable';
+import { columns, Loan } from './columns';
 
 const LoanList = () => {
-  const [loans, setLoans] = useState([{ id: 0, name: 'Loan 1', amount: 1000 }]);
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
-    // Fetch loan data here (simulated with a static array for now)
-    const fetchedLoans = [
-      { id: 1, name: 'Loan 1', amount: 1000 },
-      { id: 2, name: 'Loan 2', amount: 1500 },
-    ];
-    setLoans(fetchedLoans);
+    const fetchLoans = async () => {
+      try {
+        const response = await fetch('/api/loans');
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setLoans(data);
+      } catch (error) {
+        console.error('Failed to fetch loans:', error);
+      }
+    };
+
+    fetchLoans();
   }, []);
 
+  const handleRowClick = (loan: Loan) => {
+    router.push(`/loans/loan_details/${loan.id}`);
+  };
+
   return (
-    <div>
-      <h1>Loan List</h1>
-      <ul>
-        {loans.map((loan) => (
-          <li key={loan.id}>
-            <a href={`/loans/${loan.id}`}>{loan.name} - ${loan.amount}</a>
-          </li>
-        ))}
-      </ul>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Loan List</h1>
+      <DataTable columns={columns} data={loans} onRowClick={handleRowClick} />
     </div>
   );
 };

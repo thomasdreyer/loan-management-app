@@ -3,18 +3,19 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
+  import { SessionProvider } from 'next-auth/react';
+  import type { AppProps } from 'next/app';
+  
+  export default async function Home({ Component, pageProps }: AppProps) {
+    const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect('/auth/signin');
+    if (!session) {
+      redirect('/auth/signin');
+    }
+    return (
+      <SessionProvider session={pageProps.session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    );
   }
-
-  // Render your authenticated content here
-  return (
-    <div>
-      <h1>Welcome, {session.user?.name}</h1>
-      {/* Your content */}
-    </div>
-  );
-}
+  

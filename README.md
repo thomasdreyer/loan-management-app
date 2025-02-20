@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Loan Management App
 
-## Getting Started
+A **full-stack** loan management system built with **Next.js, Prisma, PostgreSQL, and Docker**.
 
-First, run the development server:
+## 📌 Features
+- User authentication (NextAuth.js + Prisma)
+- User roles & access levels (Bank Users)
+- Client management for loan applications
+- PostgreSQL database
+- Docker support
+- API routes for user and client management
 
+---
+
+## ⚡️ Getting Started
+
+### 1️⃣ Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/loan-management-app.git
+cd loan-management-app
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3️⃣ Set Up Environment Variables
+Create a .env file in the project root:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+DATABASE_URL="postgresql://postgres@localhost:5432/loan_management?schema=public"
+NEXTAUTH_SECRET="your_nextauth_secret"
+NEXTAUTH_URL="http://localhost:3000"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### For Docker, update your .env:
 
-## Learn More
+```bash
+DATABASE_URL="postgresql://postgres:password@db:5432/loan_management?schema=public"
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 🛠️ Database Setup
+With Prisma
+Run migrations to set up the PostgreSQL database:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx prisma migrate dev --name init
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Or sync schema without migrations:
 
-## Deploy on Vercel
+```bash
+npx prisma db push
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Using psql (Manual Setup)
+```bash
+psql -U postgres -d loan_management
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🚀 Run the Development Server
+```bash
+npm run dev
+```
+
+Visit http://localhost:3000.
+
+## 🐳 Docker Setup
+### 1️⃣ Build & Run the Containers
+```bash
+docker-compose up --build
+```
+
+### 2️⃣ Stop Containers
+```bash
+docker-compose down
+```
+
+### 3️⃣ Check Running Containers
+```bash
+docker ps
+```
+
+## 🎯 Deployment
+This app supports AWS ECS (Fargate) + GitHub Actions.
+
+Push to prod branch to trigger deployment.
+💡 Contributing
+Feel free to fork and submit pull requests! 🚀
+
+📜 License
+MIT License.
+

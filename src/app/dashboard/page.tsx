@@ -1,66 +1,48 @@
 'use client';
 import React from 'react';
-// import { useSession } from 'next-auth/react';
-// import { useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
-import Link from "next/link";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-
+import Link from 'next/link';
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function Dashboard() {
-    const sampleLoanId = "123"; // Replace with dynamic data
-//   const { data: session, status } = useSession();
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     if (status === 'loading') return; // Don't do anything while loading
-
-//     if (!data?.session) {
-//       // If there is no session, redirect to sign-in
-//       router.push('/auth/signin');
-//     }
-//   }, [session, status, router]); // Dependency array ensures this runs after session and status changes
-
-  if (status === 'loading') {
-    return <div>Loading...</div>; // Or a loader spinner
-  }
-
-
+  const cards = [
+    {
+      title: 'Loan List',
+      description: 'View all loans.',
+      href: '/loans/loans_list',
+      linkText: 'Go to Loan List',
+    },
+    {
+      title: 'Create Loan',
+      description: 'Add a new loan.',
+      href: '/loans/loan_application',
+      linkText: 'Create Loan',
+    },
+    // Add more cards as needed
+  ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">Loan Management Dashboard</h1>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-          <CardContent className="p-4">
-            <CardTitle>Loan List</CardTitle>
-            <p>View all loans in the system.</p>
-            <Link href="/loans/loans_list" className="text-blue-500 hover:underline">
-              Go to Loan List
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <CardTitle>Create Loan</CardTitle>
-            <p>Add a new loan to the system.</p>
-            <Link href="/loans/loan_application" className="text-blue-500 hover:underline">
-              Create Loan
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <CardTitle>Loan Details</CardTitle>
-            <p>View detailed information of a loan.</p>
-            <Link href={`/loans/loans_details/${sampleLoanId}`} className="text-blue-500 hover:underline">
-              Loan Details
-            </Link>
-          </CardContent>
-        </Card>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold text-center mb-8">
+        Loan Management Dashboard
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cards.map((card, index) => (
+          <Card key={index} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="text-xl">{card.title}</CardTitle>
+              <CardDescription className="mt-2 text-gray-600">
+                {card.description}
+              </CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Link href={card.href}>
+                <span className="text-blue-500 hover:underline">
+                  {card.linkText}
+                </span>
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
     </div>
   );
